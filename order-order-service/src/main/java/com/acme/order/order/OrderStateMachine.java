@@ -1,27 +1,27 @@
 package com.acme.order.order;
 
-import com.acme.order.common.core.*;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
+
 import org.springframework.stereotype.Component;
+
+import com.acme.order.common.core.BizException;
+import com.acme.order.common.core.ErrorCode;
 
 /** 校验订单状态流转是否合法。 */
 @Component
 public class OrderStateMachine {
-  private static final Map<OrderStatus, Set<OrderStatus>> RULES =
-      Map.of(
-          OrderStatus.WAIT_PAY,
-          Set.of(OrderStatus.WAIT_DELIVERY, OrderStatus.CANCELED),
-          OrderStatus.WAIT_DELIVERY,
-          Set.of(OrderStatus.WAIT_RECEIVE),
-          OrderStatus.WAIT_RECEIVE,
-          Set.of(OrderStatus.COMPLETED));
 
-  public boolean canTransit(OrderStatus from, OrderStatus to) {
-    return RULES.getOrDefault(from, Set.of()).contains(to);
-  }
+    private static final Map<OrderStatus, Set<OrderStatus>> RULES = Map.of(OrderStatus.WAIT_PAY,
+        Set.of(OrderStatus.WAIT_DELIVERY, OrderStatus.CANCELED), OrderStatus.WAIT_DELIVERY,
+        Set.of(OrderStatus.WAIT_RECEIVE), OrderStatus.WAIT_RECEIVE, Set.of(OrderStatus.COMPLETED));
 
-  public void require(OrderStatus from, OrderStatus to) {
-    if (!canTransit(from, to))
-      throw new BizException(ErrorCode.ORDER_STATUS_INVALID, "非法订单状态流转: " + from + " -> " + to);
-  }
+    public boolean canTransit(OrderStatus from, OrderStatus to) {
+        return RULES.getOrDefault(from, Set.of()).contains(to);
+    }
+
+    public void require(OrderStatus from, OrderStatus to) {
+        if (!canTransit(from, to))
+            throw new BizException(ErrorCode.ORDER_STATUS_INVALID, "非法订单状态流转: " + from + " -> " + to);
+    }
 }

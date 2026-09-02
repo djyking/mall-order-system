@@ -1,20 +1,21 @@
 package com.acme.order.common.observability;
 
-import io.micrometer.core.instrument.*;
+import io.micrometer.core.instrument.MeterRegistry;
 
 /** 订单业务指标记录器。 */
 public final class OrderMetrics {
-  private final MeterRegistry registry;
 
-  public OrderMetrics(MeterRegistry registry) {
-    this.registry = registry;
-  }
+    private final MeterRegistry registry;
 
-  public void success(String operation) {
-    registry.counter(operation + "_success_total").increment();
-  }
+    public OrderMetrics(MeterRegistry registry) {
+        this.registry = registry;
+    }
 
-  public void failure(String operation) {
-    registry.counter(operation + "_fail_total").increment();
-  }
+    public void success(String operation) {
+        registry.counter(operation + "_success_total").increment();
+    }
+
+    public void failure(String operation) {
+        registry.counter(operation + "_fail_total").increment();
+    }
 }

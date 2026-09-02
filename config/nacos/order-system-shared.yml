@@ -1,0 +1,7 @@
+spring:
+  rabbitmq:
+    host: rabbitmq
+    publisher-confirm-type: correlated
+    publisher-returns: true
+  data.redis.host: redis
+management.endpoints.web.exposure.include: health,info,prometheus

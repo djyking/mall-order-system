@@ -1,0 +1,6 @@
+apiVersion: 1
+providers:
+  - name: Order System
+    folder: Enterprise Order System
+    type: file
+    options: { path: /var/lib/grafana/dashboards }

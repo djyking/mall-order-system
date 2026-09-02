@@ -1,0 +1,10 @@
+server: { port: 8086 }
+spring:
+  application: { name: order-query-service }
+  datasource: { url: "jdbc:mysql://${MYSQL_HOST:localhost}:3306/order_query?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai", username: "${MYSQL_USER:order}", password: "${MYSQL_PASSWORD:order123456}" }
+  rabbitmq:
+    host: "${RABBITMQ_HOST:localhost}"
+    username: "${RABBITMQ_USER:order}"
+    password: "${RABBITMQ_PASSWORD:order123456}"
+    listener.simple: { default-requeue-rejected: false, retry.enabled: true, retry.max-attempts: 4, retry.initial-interval: 500ms, retry.multiplier: 2 }
+management.endpoints.web.exposure.include: health,info,prometheus

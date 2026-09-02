@@ -1,0 +1,4 @@
+server: { port: 8081 }
+spring: { application: { name: order-user-service } }
+management.endpoints.web.exposure.include: health,info,prometheus
+security.jwt.secret: ${JWT_SECRET:change-this-enterprise-order-system-secret-at-least-32-bytes}

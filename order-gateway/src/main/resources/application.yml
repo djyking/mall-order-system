@@ -1,0 +1,21 @@
+server: { port: 8080 }
+spring:
+  application: { name: order-gateway }
+  data.redis: { host: "${REDIS_HOST:localhost}", port: 6379 }
+  cloud:
+    gateway:
+      routes:
+        - { id: user, uri: "${USER_URL:http://localhost:8081}", predicates: ["Path=/api/auth/**,/api/users/**"] }
+        - { id: product, uri: "${PRODUCT_URL:http://localhost:8082}", predicates: ["Path=/api/products/**,/api/skus/**"] }
+        - id: order
+          uri: "${ORDER_URL:http://localhost:8084}"
+          predicates: ["Path=/api/orders/**"]
+          filters:
+            - name: RequestRateLimiter
+              args: { key-resolver: "#{@userKeyResolver}", redis-rate-limiter.replenishRate: 50, redis-rate-limiter.burstCapacity: 100, redis-rate-limiter.requestedTokens: 1 }
+        - { id: payment, uri: "${PAYMENT_URL:http://localhost:8085}", predicates: ["Path=/api/payments/**"] }
+        - { id: query, uri: "${QUERY_URL:http://localhost:8086}", predicates: ["Path=/api/admin/orders/**"] }
+management.endpoints.web.exposure.include: health,info,prometheus
+security:
+  jwt.secret: ${JWT_SECRET:change-this-enterprise-order-system-secret-at-least-32-bytes}
+  allow-dev-header: ${ALLOW_DEV_HEADER:true}

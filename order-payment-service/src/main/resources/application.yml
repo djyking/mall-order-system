@@ -1,0 +1,6 @@
+server: { port: 8085 }
+spring:
+  application: { name: order-payment-service }
+  datasource: { url: "jdbc:mysql://${MYSQL_HOST:localhost}:3306/order_payment?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai", username: "${MYSQL_USER:order}", password: "${MYSQL_PASSWORD:order123456}" }
+  rabbitmq: { host: "${RABBITMQ_HOST:localhost}", username: "${RABBITMQ_USER:order}", password: "${RABBITMQ_PASSWORD:order123456}", publisher-confirm-type: correlated, publisher-returns: true }
+management.endpoints.web.exposure.include: health,info,prometheus

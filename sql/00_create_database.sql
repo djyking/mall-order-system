@@ -1,0 +1,10 @@
+CREATE DATABASE IF NOT EXISTS order_user CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE DATABASE IF NOT EXISTS order_product CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE DATABASE IF NOT EXISTS order_inventory CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE DATABASE IF NOT EXISTS order_trade CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE DATABASE IF NOT EXISTS order_payment CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE DATABASE IF NOT EXISTS order_query CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE USER IF NOT EXISTS 'order'@'%' IDENTIFIED BY 'order123456';
+GRANT ALL PRIVILEGES ON order_user.* TO 'order'@'%'; GRANT ALL PRIVILEGES ON order_product.* TO 'order'@'%';
+GRANT ALL PRIVILEGES ON order_inventory.* TO 'order'@'%'; GRANT ALL PRIVILEGES ON order_trade.* TO 'order'@'%';
+GRANT ALL PRIVILEGES ON order_payment.* TO 'order'@'%'; GRANT ALL PRIVILEGES ON order_query.* TO 'order'@'%';

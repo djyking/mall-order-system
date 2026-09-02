@@ -1,0 +1,5 @@
+server: { port: 8082 }
+spring:
+  application: { name: order-product-service }
+  datasource: { url: "jdbc:mysql://${MYSQL_HOST:localhost}:3306/order_product?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai", username: "${MYSQL_USER:order}", password: "${MYSQL_PASSWORD:order123456}" }
+management.endpoints.web.exposure.include: health,info,prometheus

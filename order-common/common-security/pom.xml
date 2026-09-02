@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"><modelVersion>4.0.0</modelVersion>
+  <parent><groupId>com.acme.order</groupId><artifactId>order-common</artifactId><version>1.0.0-SNAPSHOT</version></parent>
+  <artifactId>common-security</artifactId>
+  <dependencies><dependency><groupId>com.acme.order</groupId><artifactId>common-core</artifactId><version>${project.version}</version></dependency><dependency><groupId>io.jsonwebtoken</groupId><artifactId>jjwt-api</artifactId><version>${jjwt.version}</version></dependency><dependency><groupId>io.jsonwebtoken</groupId><artifactId>jjwt-impl</artifactId><version>${jjwt.version}</version><scope>runtime</scope></dependency><dependency><groupId>io.jsonwebtoken</groupId><artifactId>jjwt-jackson</artifactId><version>${jjwt.version}</version><scope>runtime</scope></dependency></dependencies>
+</project>

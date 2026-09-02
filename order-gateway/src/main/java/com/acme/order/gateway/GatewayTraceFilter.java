@@ -1,3 +1,24 @@
 package com.acme.order.gateway;
-import org.springframework.cloud.gateway.filter.*;import org.springframework.core.Ordered;import org.springframework.stereotype.Component;import org.springframework.web.server.ServerWebExchange;import reactor.core.publisher.Mono;import java.util.UUID;
-@Component public class GatewayTraceFilter implements GlobalFilter,Ordered {public Mono<Void> filter(ServerWebExchange e,GatewayFilterChain c){String id=e.getRequest().getHeaders().getFirst("X-Trace-Id");if(id==null||id.isBlank())id=UUID.randomUUID().toString().replace("-","");var req=e.getRequest().mutate().header("X-Trace-Id",id).build();e.getResponse().getHeaders().set("X-Trace-Id",id);return c.filter(e.mutate().request(req).build());}public int getOrder(){return Ordered.HIGHEST_PRECEDENCE;}}
+
+import java.util.UUID;
+import org.springframework.cloud.gateway.filter.*;
+import org.springframework.core.Ordered;
+import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
+
+/** 在网关层生成或透传链路追踪标识。 */
+@Component
+public class GatewayTraceFilter implements GlobalFilter, Ordered {
+  public Mono<Void> filter(ServerWebExchange e, GatewayFilterChain c) {
+    String id = e.getRequest().getHeaders().getFirst("X-Trace-Id");
+    if (id == null || id.isBlank()) id = UUID.randomUUID().toString().replace("-", "");
+    var req = e.getRequest().mutate().header("X-Trace-Id", id).build();
+    e.getResponse().getHeaders().set("X-Trace-Id", id);
+    return c.filter(e.mutate().request(req).build());
+  }
+
+  public int getOrder() {
+    return Ordered.HIGHEST_PRECEDENCE;
+  }
+}

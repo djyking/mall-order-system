@@ -1,3 +1,29 @@
 package com.acme.order.order;
-import com.acme.order.common.mq.*;import com.fasterxml.jackson.databind.JsonNode;import org.springframework.amqp.rabbit.annotation.RabbitListener;import org.springframework.stereotype.Component;import org.springframework.transaction.annotation.Transactional;
-@Component public class PaymentSucceededConsumer {private final MqConsumeGuard guard;private final OrderService service;public PaymentSucceededConsumer(MqConsumeGuard g,OrderService s){guard=g;service=s;}@Transactional @RabbitListener(queues=RabbitTopology.PAYMENT_QUEUE)public void consume(JsonNode event){String id=event.path("eventId").asText(),no=event.path("payload").path("orderNo").asText();long user=event.path("payload").path("userId").asLong();if(!guard.first("order-payment",id))return;service.paymentSucceeded(no,user);guard.success("order-payment",id);}}
+
+import com.acme.order.common.mq.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+/** 消费支付成功事件并推进订单状态。 */
+@Component
+public class PaymentSucceededConsumer {
+  private final MqConsumeGuard guard;
+  private final OrderService service;
+
+  public PaymentSucceededConsumer(MqConsumeGuard g, OrderService s) {
+    guard = g;
+    service = s;
+  }
+
+  @Transactional
+  @RabbitListener(queues = RabbitTopology.PAYMENT_QUEUE)
+  public void consume(JsonNode event) {
+    String id = event.path("eventId").asText(), no = event.path("payload").path("orderNo").asText();
+    long user = event.path("payload").path("userId").asLong();
+    if (!guard.first("order-payment", id)) return;
+    service.paymentSucceeded(no, user);
+    guard.success("order-payment", id);
+  }
+}

@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.acme.order.common.core.ApiResponse;
 import org.slf4j.MDC;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.acme.order.common.core.ApiResponse;
-
-/** 提供秒杀库存预占与结果查询接口。 */
+/**
+ * 提供秒杀库存预占与结果查询接口。
+ *
+ * @author heyu
+ * @since 2026-08-12
+ */
 @RestController
 @RequestMapping("/api/seckill")
 public class SeckillController {
@@ -40,13 +44,14 @@ public class SeckillController {
         Boolean first = redis.opsForValue().setIfAbsent("order:seckill:user:" + sku + ":" + user, request,
             java.time.Duration.ofMinutes(10));
         String status;
-        if (!Boolean.TRUE.equals(first))
+        if (!Boolean.TRUE.equals(first)) {
             status = "DUPLICATE";
-        else {
+        } else {
             Long ok = redis.execute(script, List.of("order:stock:available:" + sku), Integer.toString(quantity));
             status = ok != null && ok == 1 ? "QUEUING" : "SOLD_OUT";
-            if (!"QUEUING".equals(status))
+            if (!"QUEUING".equals(status)) {
                 redis.delete("order:seckill:user:" + sku + ":" + user);
+            }
         }
         redis.opsForValue().set("order:seckill:result:" + request, status, java.time.Duration.ofHours(1));
         return ApiResponse.ok(Map.of("requestId", request, "status", status), MDC.get("traceId"));

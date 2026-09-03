@@ -1,14 +1,18 @@
 package com.acme.order.inventory;
 
+import com.acme.order.common.mq.MqConsumeGuard;
+import com.acme.order.common.mq.RabbitTopology;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.acme.order.common.mq.MqConsumeGuard;
-import com.acme.order.common.mq.RabbitTopology;
-
-/** 消费订单领域事件并同步库存状态。 */
+/**
+ * 消费订单领域事件并同步库存状态。
+ *
+ * @author heyu
+ * @since 2026-08-02
+ */
 @Component
 public class InventoryEventConsumers {
 
@@ -33,13 +37,16 @@ public class InventoryEventConsumers {
     }
 
     private void handle(JsonNode e, String group, boolean confirm) {
-        String event = e.path("eventId").asText(), order = e.path("payload").path("orderNo").asText();
-        if (!guard.first(group, event))
+        String event = e.path("eventId").asText();
+        String order = e.path("payload").path("orderNo").asText();
+        if (!guard.first(group, event)) {
             return;
-        if (confirm)
+        }
+        if (confirm) {
             service.confirm(order);
-        else
+        } else {
             service.release(order);
+        }
         guard.success(group, event);
     }
 }

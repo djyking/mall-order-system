@@ -3,7 +3,12 @@ package com.acme.order.order;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-/** 扫描超时未支付订单并执行关闭处理。 */
+/**
+ * 扫描超时未支付订单并执行关闭处理。
+ *
+ * @author heyu
+ * @since 2026-08-12
+ */
 @Component
 public class OrderJobs {
 

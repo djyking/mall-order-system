@@ -2,16 +2,20 @@ package com.acme.order.order;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.acme.order.api.inventory.InventoryDtos.Line;
 import com.acme.order.common.core.BizException;
 import com.acme.order.common.core.ErrorCode;
 import com.acme.order.common.core.Ids;
 import com.acme.order.common.redis.IdempotencyTokenService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-/** 编排订单结算、创建和状态流转业务。 */
+/**
+ * 编排订单结算、创建和状态流转业务。
+ *
+ * @author heyu
+ * @since 2026-08-12
+ */
 @Service
 public class OrderService {
 
@@ -41,8 +45,9 @@ public class OrderService {
     }
 
     public OrderDtos.OrderView create(long user, String token, List<OrderDtos.Item> requested) {
-        if (!tokens.acquire(user, token))
+        if (!tokens.acquire(user, token)) {
             throw new BizException(ErrorCode.ORDER_DUPLICATE_SUBMIT, "请勿重复提交");
+        }
         long id = Ids.next();
         String no = Ids.orderNo(id);
         boolean reserved = false;
@@ -54,11 +59,13 @@ public class OrderService {
             tokens.complete(user, token, no);
             return view(no, user);
         } catch (Exception e) {
-            if (reserved)
+            if (reserved) {
                 try {
                     remote.release(no);
                 } catch (Exception ignored) {
+                    // 主异常仍需向上抛出，库存释放由补偿任务继续处理。
                 }
+            }
             tokens.release(user, token);
             throw e;
         }
@@ -78,17 +85,20 @@ public class OrderService {
     @Transactional
     public void cancel(String no, long user, String reason) {
         var s = repo.get(no, user);
-        if (s.status() == OrderStatus.CANCELED)
+        if (s.status() == OrderStatus.CANCELED) {
             return;
+        }
         machine.require(s.status(), OrderStatus.CANCELED);
-        if (!repo.transit(s, OrderStatus.CANCELED, "USER_CANCEL", "OrderCanceled"))
+        if (!repo.transit(s, OrderStatus.CANCELED, "USER_CANCEL", "OrderCanceled")) {
             throw new BizException(ErrorCode.ORDER_STATUS_INVALID, "订单状态已变化");
+        }
     }
 
     public OrderDtos.PayView pay(String no, long user) {
         var s = repo.get(no, user);
-        if (s.status() != OrderStatus.WAIT_PAY)
+        if (s.status() != OrderStatus.WAIT_PAY) {
             throw new BizException(ErrorCode.ORDER_STATUS_INVALID, "仅待支付订单可支付");
+        }
         var p = remote.createPayment(no, user, s.total());
         return new OrderDtos.PayView(p.payOrderNo(), p.status());
     }
@@ -105,25 +115,28 @@ public class OrderService {
 
     private void transit(String no, long user, OrderStatus expected, OrderStatus target, String op, String event) {
         var snap = repo.get(no, user);
-        if (snap.status() != expected)
+        if (snap.status() != expected) {
             machine.require(snap.status(), target);
+        }
         machine.require(snap.status(), target);
-        if (!repo.transit(snap, target, op, event))
+        if (!repo.transit(snap, target, op, event)) {
             throw new BizException(ErrorCode.ORDER_STATUS_INVALID, "订单状态已变化");
+        }
     }
 
     @Transactional
     public void paymentSucceeded(String no, long user) {
         var s = repo.get(no, user);
-        if (s.status() == OrderStatus.WAIT_DELIVERY)
+        if (s.status() == OrderStatus.WAIT_DELIVERY) {
             return;
+        }
         repo.markPaid(s);
     }
 
     @Transactional
     public void closeExpired() {
-        for (var s : repo.expired())
-            if (repo.transit(s, OrderStatus.CANCELED, "TIMEOUT_CANCEL", "OrderCanceled")) {
-            }
+        for (var s : repo.expired()) {
+            repo.transit(s, OrderStatus.CANCELED, "TIMEOUT_CANCEL", "OrderCanceled");
+        }
     }
 }

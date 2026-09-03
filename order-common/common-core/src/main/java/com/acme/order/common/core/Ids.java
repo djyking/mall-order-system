@@ -3,7 +3,12 @@ package com.acme.order.common.core;
 import java.time.Instant;
 import java.util.concurrent.atomic.AtomicLong;
 
-/** 业务主键和单号生成工具。 */
+/**
+ * 业务主键和单号生成工具。
+ *
+ * @author heyu
+ * @since 2026-07-15
+ */
 public final class Ids {
 
     private static final AtomicLong SEQUENCE = new AtomicLong();

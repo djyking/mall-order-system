@@ -4,7 +4,12 @@ import java.time.Duration;
 
 import org.springframework.data.redis.core.StringRedisTemplate;
 
-/** 基于 Redis 的订单幂等令牌服务。 */
+/**
+ * 基于 Redis 的订单幂等令牌服务。
+ *
+ * @author heyu
+ * @since 2026-07-15
+ */
 public final class IdempotencyTokenService {
 
     private final StringRedisTemplate redis;

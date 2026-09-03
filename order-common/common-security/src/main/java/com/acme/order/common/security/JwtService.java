@@ -11,7 +11,12 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
-/** JWT 签发与解析服务。 */
+/**
+ * JWT 签发与解析服务。
+ *
+ * @author heyu
+ * @since 2026-07-15
+ */
 public final class JwtService {
 
     private final SecretKey key;

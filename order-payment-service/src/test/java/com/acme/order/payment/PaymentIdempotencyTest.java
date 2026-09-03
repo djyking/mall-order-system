@@ -1,15 +1,19 @@
 package com.acme.order.payment;
 
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
-import java.util.Set;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-/** 支付通知并发幂等测试。 */
+/**
+ * 支付通知并发幂等测试。
+ *
+ * @author heyu
+ * @since 2026-08-20
+ */
 class PaymentIdempotencyTest {
 
     @Test
@@ -19,10 +23,12 @@ class PaymentIdempotencyTest {
         var tasks = java.util.stream.IntStream.range(0, 100)
             .mapToObj(i -> (Callable<Boolean>) () -> processed.add("notify-1")).toList();
         int success = 0;
-        for (var f : pool.invokeAll(tasks))
-            if (f.get())
+        for (var f : pool.invokeAll(tasks)) {
+            if (f.get()) {
                 success++;
+            }
+        }
         pool.shutdown();
-        assertEquals(1, success);
+        Assertions.assertEquals(1, success);
     }
 }

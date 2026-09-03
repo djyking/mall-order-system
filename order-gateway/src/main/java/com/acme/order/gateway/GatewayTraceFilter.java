@@ -9,14 +9,20 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-/** 在网关层生成或透传链路追踪标识。 */
+/**
+ * 在网关层生成或透传链路追踪标识。
+ *
+ * @author heyu
+ * @since 2026-07-15
+ */
 @Component
 public class GatewayTraceFilter implements GlobalFilter, Ordered {
 
     public Mono<Void> filter(ServerWebExchange e, GatewayFilterChain c) {
         String id = e.getRequest().getHeaders().getFirst("X-Trace-Id");
-        if (id == null || id.isBlank())
+        if (id == null || id.isBlank()) {
             id = UUID.randomUUID().toString().replace("-", "");
+        }
         var req = e.getRequest().mutate().header("X-Trace-Id", id).build();
         e.getResponse().getHeaders().set("X-Trace-Id", id);
         return c.filter(e.mutate().request(req).build());

@@ -5,7 +5,12 @@ import java.time.OffsetDateTime;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-/** 基于消费日志实现的消息幂等守卫。 */
+/**
+ * 基于消费日志实现的消息幂等守卫。
+ *
+ * @author heyu
+ * @since 2026-07-15
+ */
 public final class MqConsumeGuard {
 
     private final JdbcTemplate jdbc;
@@ -17,7 +22,8 @@ public final class MqConsumeGuard {
     public boolean first(String group, String eventId) {
         try {
             jdbc.update(
-                "INSERT INTO mq_consume_log(id,consumer_group,event_id,consume_status,create_time,update_time) VALUES(?,?,?,?,?,?)",
+                "INSERT INTO mq_consume_log(id,consumer_group,event_id,consume_status,create_time,update_time) "
+                    + "VALUES(?,?,?,?,?,?)",
                 Math.abs((group + eventId).hashCode()), group, eventId, 0, OffsetDateTime.now(), OffsetDateTime.now());
             return true;
         } catch (DuplicateKeyException ignored) {

@@ -1,16 +1,20 @@
 package com.acme.order.common.web;
 
-import org.slf4j.MDC;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-
 import com.acme.order.common.core.ApiResponse;
 import com.acme.order.common.core.BizException;
 import com.acme.order.common.core.ErrorCode;
+import org.slf4j.MDC;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-/** Web 层统一异常处理器。 */
+/**
+ * Web 层统一异常处理器。
+ *
+ * @author heyu
+ * @since 2026-07-15
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

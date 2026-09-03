@@ -1,7 +1,10 @@
 package com.acme.order.inventory;
 
+import com.acme.order.api.inventory.InventoryDtos.ChangeRequest;
+import com.acme.order.api.inventory.InventoryDtos.ReserveRequest;
+import com.acme.order.api.inventory.InventoryDtos.StockView;
+import com.acme.order.common.core.ApiResponse;
 import jakarta.validation.Valid;
-
 import org.slf4j.MDC;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.acme.order.api.inventory.InventoryDtos.ChangeRequest;
-import com.acme.order.api.inventory.InventoryDtos.ReserveRequest;
-import com.acme.order.api.inventory.InventoryDtos.StockView;
-import com.acme.order.common.core.ApiResponse;
-
-/** 提供库存预占、确认、释放与查询接口。 */
+/**
+ * 提供库存预占、确认、释放与查询接口。
+ *
+ * @author heyu
+ * @since 2026-08-02
+ */
 @RestController
 @RequestMapping("/internal/inventory")
 public class InventoryController {

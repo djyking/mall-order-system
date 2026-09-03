@@ -2,6 +2,7 @@ package com.acme.order.gateway;
 
 import java.nio.charset.StandardCharsets;
 
+import com.acme.order.common.security.JwtService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -12,9 +13,12 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-import com.acme.order.common.security.JwtService;
-
-/** 校验访问令牌并向下游透传用户身份的网关过滤器。 */
+/**
+ * 校验访问令牌并向下游透传用户身份的网关过滤器。
+ *
+ * @author heyu
+ * @since 2026-07-15
+ */
 @Component
 public class GatewayAuthFilter implements GlobalFilter, Ordered {
 
@@ -29,14 +33,17 @@ public class GatewayAuthFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(org.springframework.web.server.ServerWebExchange e, GatewayFilterChain c) {
         String path = e.getRequest().getPath().value();
         if (path.startsWith("/api/auth/") || path.startsWith("/api/products/") || path.startsWith("/api/skus/")
-            || path.startsWith("/actuator/"))
+            || path.startsWith("/actuator/")) {
             return c.filter(e);
-        if (dev && e.getRequest().getHeaders().containsKey("X-User-Id"))
+        }
+        if (dev && e.getRequest().getHeaders().containsKey("X-User-Id")) {
             return c.filter(e);
+        }
         String auth = e.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         try {
-            if (auth == null || !auth.startsWith("Bearer "))
+            if (auth == null || !auth.startsWith("Bearer ")) {
                 throw new IllegalArgumentException();
+            }
             var claims = jwt.parse(auth.substring(7));
             var req = e.getRequest().mutate().headers(h -> {
                 h.set("X-User-Id", claims.getSubject());

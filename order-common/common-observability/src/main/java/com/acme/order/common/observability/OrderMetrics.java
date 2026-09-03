@@ -2,7 +2,12 @@ package com.acme.order.common.observability;
 
 import io.micrometer.core.instrument.MeterRegistry;
 
-/** 订单业务指标记录器。 */
+/**
+ * 订单业务指标记录器。
+ *
+ * @author heyu
+ * @since 2026-07-15
+ */
 public final class OrderMetrics {
 
     private final MeterRegistry registry;

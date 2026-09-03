@@ -2,23 +2,29 @@ package com.acme.order.order;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClient;
-
 import com.acme.order.api.inventory.InventoryDtos.ChangeRequest;
 import com.acme.order.api.inventory.InventoryDtos.Line;
 import com.acme.order.api.inventory.InventoryDtos.ReserveRequest;
 import com.acme.order.api.payment.PaymentDtos;
 import com.acme.order.api.product.ProductDtos.SkuView;
 import com.acme.order.common.core.ApiResponse;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClient;
 
-/** 封装订单服务对商品、库存和支付服务的远程调用。 */
+/**
+ * 封装订单服务对商品、库存和支付服务的远程调用。
+ *
+ * @author heyu
+ * @since 2026-08-12
+ */
 @Component
 public class RemoteClients {
 
-    private final RestClient product, inventory, payment;
+    private final RestClient product;
+    private final RestClient inventory;
+    private final RestClient payment;
 
     public RemoteClients(@Qualifier("productClient") RestClient p, @Qualifier("inventoryClient") RestClient i,
         @Qualifier("paymentClient") RestClient pay) {

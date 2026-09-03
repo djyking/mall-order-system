@@ -3,12 +3,16 @@ package com.acme.order.order;
 import java.util.Map;
 import java.util.Set;
 
-import org.springframework.stereotype.Component;
-
 import com.acme.order.common.core.BizException;
 import com.acme.order.common.core.ErrorCode;
+import org.springframework.stereotype.Component;
 
-/** 校验订单状态流转是否合法。 */
+/**
+ * 校验订单状态流转是否合法。
+ *
+ * @author heyu
+ * @since 2026-08-12
+ */
 @Component
 public class OrderStateMachine {
 
@@ -21,7 +25,8 @@ public class OrderStateMachine {
     }
 
     public void require(OrderStatus from, OrderStatus to) {
-        if (!canTransit(from, to))
+        if (!canTransit(from, to)) {
             throw new BizException(ErrorCode.ORDER_STATUS_INVALID, "非法订单状态流转: " + from + " -> " + to);
+        }
     }
 }

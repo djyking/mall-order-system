@@ -1,12 +1,16 @@
 package com.acme.order.payment;
 
+import com.acme.order.api.payment.PaymentDtos.CreateRequest;
+import com.acme.order.api.payment.PaymentDtos.PayView;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.acme.order.api.payment.PaymentDtos.CreateRequest;
-import com.acme.order.api.payment.PaymentDtos.PayView;
-
-/** 编排支付单创建、支付成功和支付查询业务。 */
+/**
+ * 编排支付单创建、支付成功和支付查询业务。
+ *
+ * @author heyu
+ * @since 2026-08-20
+ */
 @Service
 public class PaymentService {
 

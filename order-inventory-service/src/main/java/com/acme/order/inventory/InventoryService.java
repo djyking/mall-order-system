@@ -1,11 +1,15 @@
 package com.acme.order.inventory;
 
+import com.acme.order.api.inventory.InventoryDtos.ReserveRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.acme.order.api.inventory.InventoryDtos.ReserveRequest;
-
-/** 编排库存预占、确认和释放事务。 */
+/**
+ * 编排库存预占、确认和释放事务。
+ *
+ * @author heyu
+ * @since 2026-08-02
+ */
 @Service
 public class InventoryService {
 

@@ -5,7 +5,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Mono;
 
-/** 网关限流键解析配置。 */
+/**
+ * 网关限流键解析配置。
+ *
+ * @author heyu
+ * @since 2026-07-15
+ */
 @Configuration
 public class GatewayRateLimitConfig {
 

@@ -5,7 +5,12 @@ import java.util.UUID;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-/** 在订单事务中写入订单聚合及领域事件。 */
+/**
+ * 在订单事务中写入订单聚合及领域事件。
+ *
+ * @author heyu
+ * @since 2026-08-12
+ */
 @Component
 public class OrderTxWriter {
 

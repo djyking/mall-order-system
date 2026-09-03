@@ -1,13 +1,17 @@
 package com.acme.order.product;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
-
 import com.acme.order.api.product.ProductDtos.SkuView;
 import com.acme.order.common.core.BizException;
 import com.acme.order.common.core.ErrorCode;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
-/** 商品和 SKU 数据访问组件。 */
+/**
+ * 商品和 SKU 数据访问组件。
+ *
+ * @author heyu
+ * @since 2026-07-24
+ */
 @Repository
 public class ProductRepository {
 
@@ -19,10 +23,12 @@ public class ProductRepository {
 
     public SkuView sku(long id) {
         return jdbc.query(
-            "SELECT s.id,s.spu_id,p.name,s.sku_name,s.price_cent,s.status FROM product_sku s JOIN product_spu p ON p.id=s.spu_id WHERE s.id=?",
+            "SELECT s.id,s.spu_id,p.name,s.sku_name,s.price_cent,s.status FROM product_sku s "
+                + "JOIN product_spu p ON p.id=s.spu_id WHERE s.id=?",
             rs -> {
-                if (!rs.next())
+                if (!rs.next()) {
                     throw new BizException(ErrorCode.SKU_NOT_FOUND, "SKU不存在");
+                }
                 return new SkuView(rs.getLong(1), rs.getLong(2), rs.getString(3), rs.getString(4), rs.getLong(5),
                     rs.getInt(6) == 1);
             }, id);

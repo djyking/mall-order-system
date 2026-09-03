@@ -1,13 +1,17 @@
 package com.acme.order.inventory;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.acme.order.common.mq.MqConsumeGuard;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.acme.order.common.mq.MqConsumeGuard;
-
-/** 库存服务启动入口及消息消费组件配置。 */
+/**
+ * 库存服务启动入口及消息消费组件配置。
+ *
+ * @author heyu
+ * @since 2026-08-02
+ */
 @SpringBootApplication(scanBasePackages = "com.acme.order")
 public class InventoryApplication {
 

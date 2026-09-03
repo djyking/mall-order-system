@@ -10,13 +10,39 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/** 订单领域事件的 RabbitMQ 拓扑配置。 */
+/**
+ * 订单领域事件的 RabbitMQ 拓扑配置。
+ *
+ * @author heyu
+ * @since 2026-07-15
+ */
 @Configuration
 public class RabbitTopology {
 
-    public static final String EXCHANGE = "order.domain.exchange", PAYMENT_QUEUE = "order.payment-succeeded.queue",
-        CONFIRM_QUEUE = "order.inventory-confirm.queue", RELEASE_QUEUE = "order.inventory-release.queue",
-        QUERY_QUEUE = "order.query-index.queue";
+    /**
+     * 订单领域事件交换机。
+     */
+    public static final String EXCHANGE = "order.domain.exchange";
+
+    /**
+     * 支付成功事件队列。
+     */
+    public static final String PAYMENT_QUEUE = "order.payment-succeeded.queue";
+
+    /**
+     * 库存确认事件队列。
+     */
+    public static final String CONFIRM_QUEUE = "order.inventory-confirm.queue";
+
+    /**
+     * 库存释放事件队列。
+     */
+    public static final String RELEASE_QUEUE = "order.inventory-release.queue";
+
+    /**
+     * 订单查询索引事件队列。
+     */
+    public static final String QUERY_QUEUE = "order.query-index.queue";
 
     @Bean
     TopicExchange domainExchange() {

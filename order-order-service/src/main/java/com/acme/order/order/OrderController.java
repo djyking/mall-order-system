@@ -1,7 +1,7 @@
 package com.acme.order.order;
 
+import com.acme.order.common.core.ApiResponse;
 import jakarta.validation.Valid;
-
 import org.slf4j.MDC;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.acme.order.common.core.ApiResponse;
-
-/** 提供订单结算、创建、支付、取消和查询接口。 */
+/**
+ * 提供订单结算、创建、支付、取消和查询接口。
+ *
+ * @author heyu
+ * @since 2026-08-12
+ */
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {

@@ -29,6 +29,8 @@
         <java.version>17</java.version>
         <spring-cloud.version>2025.0.0</spring-cloud.version>
         <spring-cloud-alibaba.version>2025.0.0.0</spring-cloud-alibaba.version>
+        <sentinel.version>1.8.9</sentinel.version>
+        <shardingsphere.version>5.5.2</shardingsphere.version>
         <jjwt.version>0.12.6</jjwt.version>
         <testcontainers.version>1.21.3</testcontainers.version>
     </properties>
